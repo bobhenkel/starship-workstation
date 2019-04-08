@@ -4,9 +4,11 @@ A different take on having a Ansible playbook do this. Converge is a singel bina
 
 This particalur setup is targted at PopOS 18.10, distro based off Ubuntu 18.10. If you don't have apt and apt-get on your distro this probably won't work well.  In the current state this setup will only work on my personal workstation, but maybe be handy for folks as a template.
 
-1. clone this repo
-2. cd into starship-workstation
-3. sudo converge apply --local main.hcl
+1. install converge by downloading correct release for platform from https://github.com/asteris-llc/converge/releases and put it in your path
+2. cmod +x converge
+3. clone this repo
+4. cd into starship-workstation
+5. sudo converge apply --local main.hcl
 
 # TODO
 1. Break into multiple files

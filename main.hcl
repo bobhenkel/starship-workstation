@@ -9,6 +9,18 @@ package.apt "fish" {
   depends = ["task.apt-update"]
 }
 
+package.apt "inkscape" {
+  name  = "inkscape"
+  state = "present"
+  depends = ["task.apt-update"]
+}
+
+package.apt "vim" {
+  name  = "vim"
+  state = "present"
+  depends = ["task.apt-update"]
+}
+
 package.apt "flameshot" {
   name  = "flameshot"
   state = "present"
@@ -351,7 +363,7 @@ file.fetch "dl-vivaldi" {
 }
 
 task "install-terraform" {
-  check = "which terraform"
+  check = "[ -f /home/bhenkel/.local/bin/terraform ]"
   apply = <<EOF
 #!/bin/bash
 set -x -v -e
@@ -377,7 +389,7 @@ file.mode "terraform" {
 }
 
 task "install-packer" {
-  check = "which packer"
+  check = "[ -f /home/bhenkel/.local/bin/packer ]"
   apply = <<EOF
 #!/bin/bash
 set -x -v -e
@@ -402,7 +414,7 @@ file.mode "packer" {
   depends = ["task.install-packer"]
 }
 task "install-vagrant" {
-  check = "which vagrant"
+  check = "[ -f /home/bhenkel/.local/bin/vagrant ]"
   apply = <<EOF
 #!/bin/bash
 set -x -v -e
@@ -429,7 +441,7 @@ file.mode "vagrant" {
 
 ####
 task "install-kubectx-kubens" {
-  check = "which kubectx && which kubens"
+  check = "[ -f /home/bhenkel/.local/bin/kubectx ] && [ -f /home/bhenkel/.local/bin/kubens ]"
   apply = <<EOF
 #!/bin/bash
 set -x -v -e
@@ -460,7 +472,7 @@ package.apt "gpick" {
 
 ####
 task "install-helm" {
-  check = "which helm"
+  check = "[ -f /home/bhenkel/.local/bin/helm ]"
   apply = <<EOF
 #!/bin/bash
 set -x -v -e
@@ -485,7 +497,7 @@ file.mode "helm" {
 
 ####
 task "install-task" {
-  check = "which task"
+  check = "[ -f /home/bhenkel/.local/bin/task ]"
   apply = <<EOF
 #!/bin/bash
 set -x -v -e
@@ -509,7 +521,7 @@ file.mode "task" {
 
 ####
 task "install-pulumi" {
-  check = "which pulumi"
+  check = "[ -f /home/bhenkel/.local/bin/pulumi ]"
   apply = <<EOF
 #!/bin/bash
 set -x -v -e
@@ -531,3 +543,28 @@ file.mode "pulumi" {
   depends = ["task.install-pulumi"]
 }
 
+####
+task "install-gcloud" {
+  check = "[ -f /tmp/google-cloud-sdk/bin/gcloud ]"
+  apply = <<EOF
+#!/bin/bash
+set -x -v -e
+wget "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-241.0.0-linux-x86_64.tar.gz" -P /tmp/
+tar -zxvf /tmp/google-cloud-sdk-241.0.0-linux-x86_64.tar.gz --directory /tmp/
+chmod +x /tmp/google-cloud-sdk/install.sh
+/tmp/google-cloud-sdk/install.sh --quiet
+EOF
+  depends = ["file.directory.home-local-bin"]
+}
+
+
+
+task "install-python3" {
+  check = "which python3"
+  apply = <<EOF
+#!/bin/bash
+set -x -v -e
+apt install python3-pip
+pip3 install virtualenv
+EOF
+}
